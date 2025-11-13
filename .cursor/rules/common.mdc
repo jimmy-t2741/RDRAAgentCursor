@@ -1,0 +1,66 @@
+---
+alwaysApply: true
+---
+
+# RDRA Agent ルール
+
+## Agent実行時のルール
+
+- フォルダーを作成するときは既にフォルダーが存在するか確認し、存在する時はそのフォルダーを使用する
+- 出力するファイルと同じ名前のファイルが存在する場合は、そのファイルを上書きする
+- 再作成するファイルは、そのファイルを削除してから実行するので、AIAgentは生成対象のひな型を生成しないでください
+- 【重要】が付けられたものは必ず実行する
+
+## フォルダー構成
+
+### 「0_RDRAZeroOne/phase1」「0_RDRAZeroOne/phase2」「0_RDRAZeroOne/phase3」「0_RDRAZeroOne/phase4」
+
+- 生成物を保持するフォルダー
+- Phase1-Phase4:フェーズ毎の成果物を保持するフォルダー
+
+### 「1_RDRA」フォルダー
+
+- 生成物を保持するフォルダー
+- フェーズ３とフェーズ４の生成物を保持するフォルダー
+- 関連データ.txt:RDRAGraphのためのデータ
+
+### 「2_RDRASpec」フォルダー
+
+- 生成物を保持するフォルダー
+- 仕様ファイルを保持するフォルダー
+
+### 「RDRA_Knowledge/0_RDRAZeroOne」フォルダー
+
+- RDRAZeroOne.md:初期要望から４フェーズでRDRASheetを生成する手順を示す
+- WhatIsZeroOne.md:各フェーズの目的や意味、生成したファイルの扱い方を説明
+
+### 「RDRA_Knowledge/1_RDRA」フォルダー
+
+要件定義手法の「RDRA」の考え方をまとめたファイルを含む
+
+- RDRA.md:RDRAの考え方をまとめたファイル
+- RDRASheet.md:RDRA定義をSpreadsheetで行う各シートのフォーマットの説明、各シート内のモデルは「RDRA.md」で定義したモデルに対応する
+- RDRAGraph.md:RDRAGraphのデータ構造「関連データ」の説明
+
+### 「RDRA_Knowledge/2_RDRASpec」フォルダー
+
+- 21_data.md:RDRA定義から論理データを生成する方法を説明したファイル
+- 22_ui.md:ユースケースと画面の関係から画面のUI定義を生成する方法を記述したファイル
+- 23_business_rule.md:ビジネスルールモジュールを定義する方法を記述したファイル
+- specValidation.md:仕様の妥当性検証方法を記述したファイル
+
+### 「RDRA_Knowledge/2_RDRASpec/Validation」フォルダー
+
+論理データとprototypeの生成物が保持される
+
+### 「RDRA_Knowledge/helper_tools」フォルダー
+
+ファイルの削除やコピーなどのツールを保持する
+
+## シンタックス
+
+- 「return」は関数から抜け出しメッセージを渡し、疑似言語の実行を終了する
+- 「StepN:」があるときは順番に実行する
+- 「Rule:」があるときはその関数内ではそのルールに従うこと
+- 「start process」はコマンドの実行、ブラウザの起動、Javascriptの実行を行う
+- 「Gole:」そのfunctionの目的、達成することを示し、この実現に向けて生成と推論を連続して実行する

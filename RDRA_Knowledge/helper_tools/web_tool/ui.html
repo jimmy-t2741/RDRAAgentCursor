@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画面編集</title>
+  <style>
+    /* リセットとベーススタイル */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1a1a1a;
+      color: #ffffff;
+      font-family: 'Segoe UI', 'Meiryo', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Sidebar スタイル */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100vh;
+      background: #2a2a2a;
+      border-right: 1px solid #3a3a3a;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid #3a3a3a;
+      background: #323232;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ff8c42;
+    }
+
+    .close-button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .close-button:hover {
+      background: #c82333;
+    }
+
+    .sidebar-content {
+      padding: 16px;
+    }
+
+    .business-item {
+      margin-bottom: 16px;
+    }
+
+    .business-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin-bottom: 8px;
+      padding: 8px 12px;
+      background: #3a3a3a;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .business-title:hover {
+      background: #404040;
+    }
+
+    .business-title.expanded {
+      background: #404040;
+      color: #ff8c42;
+    }
+
+    .buc-list {
+      margin-left: 16px;
+      display: none;
+    }
+
+    .buc-list.expanded {
+      display: block;
+    }
+
+    .buc-item {
+      margin-bottom: 8px;
+    }
+
+    .buc-title {
+      font-size: 14px;
+      color: #e0e0e0;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .buc-title:hover {
+      background: #404040;
+      color: #ff8c42;
+    }
+
+    .buc-title.selected {
+      background: #ff8c42;
+      color: #ffffff;
+    }
+
+    /* Panel スタイル */
+    .panel {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 2px solid #3a3a3a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #404040;
+    }
+
+    .panel-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ff8c42;
+      padding: 8px 16px;
+      background: #404040;
+      border-radius: 8px;
+      border: 1px solid #555;
+    }
+
+    /* Card スタイル */
+    .card {
+      background: #323232;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 2px solid #404040;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .card:hover {
+      border-color: #ff8c42;
+      box-shadow: 0 4px 16px rgba(255,140,66,0.2);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border-bottom: 2px solid #404040;
+      background: linear-gradient(135deg, #404040 0%, #505050 100%);
+      border-radius: 8px;
+      border: 1px solid #555;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* 画面グリッド */
+    .screens-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .screen-card {
+      background: #323232;
+      border-radius: 8px;
+      padding: 12px;
+      border: 2px solid #404040;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .screen-card:hover {
+      border-color: #ff8c42;
+      box-shadow: 0 4px 16px rgba(255,140,66,0.2);
+      transform: translateY(-2px);
+    }
+
+    .screen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: linear-gradient(135deg, #ff8c42 0%, #ffa95c 100%);
+      border-radius: 6px;
+      border: 1px solid #e67e22;
+      box-shadow: 0 2px 4px rgba(255,140,66,0.3);
+      min-height: 32px;
+    }
+
+    .screen-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .screen-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* メインコンテンツ */
+    .main-content {
+      margin-left: 220px;
+      padding: 24px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+      width: calc(100vw - 220px);
+      box-sizing: border-box;
+    }
+
+    .content-header {
+      margin-bottom: 32px;
+      padding: 20px;
+      background: #2a2a2a;
+      border-radius: 12px;
+      border: 2px solid #3a3a3a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .content-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .content-subtitle {
+      color: #e0e0e0;
+      font-size: 16px;
+    }
+
+    /* Tabs スタイル */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #3a3a3a;
+      margin-bottom: 24px;
+      background: #2a2a2a;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      color: #e0e0e0;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .tab:hover {
+      background: #3a3a3a;
+      color: #ffffff;
+    }
+
+    .tab.active {
+      color: #ff8c42;
+      border-bottom: 2px solid #ff8c42;
+      background: #3a3a3a;
+    }
+
+    /* Button スタイル */
+    .btn {
+      background: #ff8c42;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #ffa95c;
+    }
+
+    .btn-secondary {
+      background: #404040;
+      color: #e0e0e0;
+    }
+
+    .btn-secondary:hover {
+      background: #505050;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: #ffffff;
+    }
+
+    .btn-danger:hover {
+      background: #e74c3c;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: #ffffff;
+    }
+
+    .btn-success:hover {
+      background: #2ecc71;
+    }
+
+    .btn-sm {
+      padding: 3px 6px;
+      font-size: 11px;
+      height: 24px;
+    }
+
+    /* Form 要素 */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: linear-gradient(135deg, #3a3a3a 0%, #404040 100%);
+      border-radius: 6px;
+      border: 1px solid #555;
+      transition: all 0.3s ease;
+      min-height: 40px;
+    }
+
+    .form-row:hover {
+      background: linear-gradient(135deg, #404040 0%, #454545 100%);
+      border-color: #666;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .form-label {
+      min-width: 100px;
+      color: #e0e0e0;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .form-input {
+      background: #404040;
+      color: #ffffff;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 13px;
+      min-width: 120px;
+      height: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #ff8c42;
+    }
+
+    .form-select {
+      background: #404040;
+      color: #ffffff;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 13px;
+      min-width: 100px;
+      height: 28px;
+      cursor: pointer;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: #ff8c42;
+    }
+
+    .form-tooltip {
+      color: #999;
+      font-size: 11px;
+      margin-left: 6px;
+      font-style: italic;
+    }
+
+    /* アイコン */
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    .icon-delete::before {
+      content: "🗑";
+    }
+
+    .icon-add::before {
+      content: "➕";
+    }
+
+    .icon-edit::before {
+      content: "✏";
+    }
+
+    .icon-save::before {
+      content: "💾";
+    }
+
+    /* ユーティリティ */
+    .flex {
+      display: flex;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .gap-2 {
+      gap: 8px;
+    }
+
+    .gap-4 {
+      gap: 16px;
+    }
+
+    .mb-4 {
+      margin-bottom: 16px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 1200px) {
+      .screens-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+        width: 100vw;
+      }
+      
+      .screens-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .form-label {
+        min-width: auto;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .screen-card {
+        padding: 12px;
+      }
+    }
+
+    /* アニメーション */
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* スクロールバー */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #2a2a2a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">業務/BUC</div>
+      <button class="close-button" onclick="closeAndStopServer()">閉じる</button>
+    </div>
+    <div class="sidebar-content" id="sidebarContent">
+      <!-- サイドバーの内容はJavaScriptで動的に生成 -->
+    </div>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <div class="main-content">
+    <div class="content-header">
+      <h1 class="content-title">画面編集</h1>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+      <!-- タブはJavaScriptで動的に生成 -->
+    </div>
+
+    <!-- Panels -->
+    <div id="panels">
+      <!-- パネルはJavaScriptで動的に生成 -->
+    </div>
+
+    <!-- 保存ボタン -->
+    <div class="panel">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="panel-title">データ保存</h3>
+          <p style="color: #e0e0e0; font-size: 14px; margin-top: 4px;">
+            変更内容をui.jsonファイルに保存します
+          </p>
+        </div>
+        <button class="btn btn-success" onclick="saveData()">
+          <span class="icon icon-save"></span>
+          保存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let uiData = {};
+    let entitiesData = [];
+    let currentBUC = null;
+
+    // データ読み込み
+    async function loadData() {
+      try {
+        // ui.jsonデータを読み込み
+        const uiResponse = await fetch('/api/ui');
+        if (!uiResponse.ok) {
+          throw new Error('ui.jsonの読み込みに失敗しました');
+        }
+        uiData = await uiResponse.json();
+        
+        // エンティティリストを読み込み
+        const entitiesResponse = await fetch('/api/entities');
+        if (entitiesResponse.ok) {
+          entitiesData = await entitiesResponse.json();
+        }
+                
+        renderSidebar();
+        renderTabs();
+        renderPanels();
+      } catch (error) {
+        console.error('データ読み込みエラー:', error);
+        alert('データの読み込みに失敗しました: ' + error.message);
+      }
+    }
+
+    // サイドバーの描画
+    function renderSidebar() {
+      const sidebarContent = document.getElementById('sidebarContent');
+      sidebarContent.innerHTML = '';
+
+      uiData.businesses.forEach(business => {
+        const businessDiv = document.createElement('div');
+        businessDiv.className = 'business-item';
+
+        const businessTitle = document.createElement('div');
+        businessTitle.className = 'business-title';
+        businessTitle.textContent = business.business_name;
+        businessTitle.onclick = () => toggleBusiness(businessTitle, businessDiv);
+
+        const bucList = document.createElement('div');
+        bucList.className = 'buc-list';
+
+        business.BUCs.forEach(buc => {
+          const bucItem = document.createElement('div');
+          bucItem.className = 'buc-item';
+
+          const bucTitle = document.createElement('div');
+          bucTitle.className = 'buc-title';
+          bucTitle.textContent = buc.buc_name;
+          bucTitle.onclick = () => selectBUC(buc, bucTitle);
+
+          bucItem.appendChild(bucTitle);
+          bucList.appendChild(bucItem);
+        });
+
+        businessDiv.appendChild(businessTitle);
+        businessDiv.appendChild(bucList);
+        sidebarContent.appendChild(businessDiv);
+      });
+    }
+
+    // ビジネスの展開/折りたたみ
+    function toggleBusiness(titleElement, businessDiv) {
+      const bucList = businessDiv.querySelector('.buc-list');
+      const isExpanded = bucList.classList.contains('expanded');
+      
+      if (isExpanded) {
+        bucList.classList.remove('expanded');
+        titleElement.classList.remove('expanded');
+      } else {
+        bucList.classList.add('expanded');
+        titleElement.classList.add('expanded');
+      }
+    }
+
+    // BUCの選択
+    function selectBUC(buc, titleElement) {
+      // 既存の選択をクリア
+      document.querySelectorAll('.buc-title').forEach(el => {
+        el.classList.remove('selected');
+      });
+      
+      // 新しい選択を設定
+      titleElement.classList.add('selected');
+      currentBUC = buc;
+      
+      renderTabs();
+      renderPanels();
+    }
+
+    // タブの描画
+    function renderTabs() {
+      const tabsContainer = document.getElementById('tabs');
+      tabsContainer.innerHTML = '';
+
+      if (!currentBUC) {
+        tabsContainer.innerHTML = '<div style="padding: 20px; color: #e0e0e0;">サイドバーからBUCを選択してください</div>';
+        return;
+      }
+
+      currentBUC.actors.forEach((actor, index) => {
+        const tab = document.createElement('button');
+        tab.className = 'tab' + (index === 0 ? ' active' : '');
+        tab.textContent = actor.actor_name;
+        tab.onclick = () => switchTab(index);
+        tabsContainer.appendChild(tab);
+      });
+    }
+
+    // パネルの描画
+    function renderPanels() {
+      const panelsContainer = document.getElementById('panels');
+      panelsContainer.innerHTML = '';
+
+      if (!currentBUC) {
+        return;
+      }
+
+      currentBUC.actors.forEach((actor, actorIndex) => {
+        const panel = document.createElement('div');
+        panel.className = 'panel' + (actorIndex === 0 ? '' : ' hidden');
+        panel.id = `panel-${actorIndex}`;
+
+        const panelHeader = document.createElement('div');
+        panelHeader.className = 'panel-header';
+        panelHeader.innerHTML = `
+          <h4 class="panel-title">${actor.actor_name}</h3>
+          <button class="btn btn-secondary btn-sm" onclick="addScreen(${actorIndex})">
+            <span class="icon icon-add"></span>
+            画面追加
+          </button>
+        `;
+
+        const screensContainer = document.createElement('div');
+        screensContainer.className = 'screens-grid';
+
+        // 画面を直接screens-gridに配置
+        actor.screens.forEach((screen, screenIndex) => {
+          const card = createScreenCard(screen, actorIndex, screenIndex);
+          screensContainer.appendChild(card);
+        });
+
+        panel.appendChild(panelHeader);
+        panel.appendChild(screensContainer);
+        panelsContainer.appendChild(panel);
+      });
+    }
+
+    // 画面カードの作成
+    function createScreenCard(screen, actorIndex, screenIndex) {
+      const card = document.createElement('div');
+      card.className = 'screen-card fade-in';
+
+      const cardHeader = document.createElement('div');
+      cardHeader.className = 'screen-header';
+      cardHeader.innerHTML = `
+        <input type="text" class="screen-title" value="${screen.screen_name}" 
+               onchange="updateScreenName(${actorIndex}, ${screenIndex}, this.value)"
+               style="background: transparent; border: none; color: #ffffff; font-size: 14px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); flex: 1;">
+        <div class="screen-actions">
+          <button class="btn btn-secondary btn-sm" onclick="addField(${actorIndex}, ${screenIndex})">
+            <span class="icon icon-add"></span>
+            項目追加
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteScreen(${actorIndex}, ${screenIndex})">
+            <span class="icon icon-delete"></span>
+            削除
+          </button>
+        </div>
+      `;
+
+      const fieldsContainer = document.createElement('div');
+      fieldsContainer.className = 'fields-container';
+
+      // フィールド情報の表示
+      if (screen.fields && screen.fields.length > 0) {
+        const fieldsTitle = document.createElement('div');
+        fieldsTitle.className = 'form-label';
+        fieldsTitle.style.marginBottom = '8px';
+        fieldsTitle.style.color = '#ff8c42';
+        fieldsTitle.style.fontWeight = '600';
+        fieldsTitle.textContent = 'フィールド:';
+        fieldsContainer.appendChild(fieldsTitle);
+
+        screen.fields.forEach((field, fieldIndex) => {
+          const fieldRow = createFieldRow(field, actorIndex, screenIndex, fieldIndex);
+          fieldsContainer.appendChild(fieldRow);
+        });
+      }
+
+      // 操作情報の編集
+      const operationsTitle = document.createElement('div');
+      operationsTitle.className = 'form-label';
+      operationsTitle.style.marginTop = '16px';
+      operationsTitle.style.marginBottom = '8px';
+      operationsTitle.style.color = '#28a745';
+      operationsTitle.style.fontWeight = '600';
+      operationsTitle.style.display = 'flex';
+      operationsTitle.style.justifyContent = 'space-between';
+      operationsTitle.style.alignItems = 'center';
+      operationsTitle.innerHTML = `
+        操作:
+        <button class="btn btn-secondary btn-sm" onclick="addOperation(${actorIndex}, ${screenIndex})">
+          <span class="icon icon-add"></span>
+          操作追加
+        </button>
+      `;
+      fieldsContainer.appendChild(operationsTitle);
+
+      // 操作項目がない場合は空の配列を初期化
+      if (!screen.operations) {
+        screen.operations = [];
+      }
+
+      screen.operations.forEach((operation, operationIndex) => {
+        const operationRow = document.createElement('div');
+        operationRow.className = 'form-row';
+        operationRow.innerHTML = `
+          <div class="form-group">
+            <select class="form-select" onchange="updateOperation(${actorIndex}, ${screenIndex}, ${operationIndex}, this.value)">
+              <option value="">操作を選択</option>
+              <option value="登録" ${operation === '登録' ? 'selected' : ''}>登録</option>
+              <option value="更新" ${operation === '更新' ? 'selected' : ''}>更新</option>
+              <option value="削除" ${operation === '削除' ? 'selected' : ''}>削除</option>
+              <option value="照会" ${operation === '照会' ? 'selected' : ''}>照会</option>
+              <option value="確認" ${operation === '確認' ? 'selected' : ''}>確認</option>
+              <option value="承認" ${operation === '承認' ? 'selected' : ''}>承認</option>
+              <option value="却下" ${operation === '却下' ? 'selected' : ''}>却下</option>
+              <option value="検索" ${operation === '検索' ? 'selected' : ''}>検索</option>
+              <option value="印刷" ${operation === '印刷' ? 'selected' : ''}>印刷</option>
+              <option value="エクスポート" ${operation === 'エクスポート' ? 'selected' : ''}>エクスポート</option>
+              <option value="インポート" ${operation === 'インポート' ? 'selected' : ''}>インポート</option>
+              <option value="計算" ${operation === '計算' ? 'selected' : ''}>計算</option>
+              <option value="集計" ${operation === '集計' ? 'selected' : ''}>集計</option>
+              <option value="分析" ${operation === '分析' ? 'selected' : ''}>分析</option>
+              <option value="通知" ${operation === '通知' ? 'selected' : ''}>通知</option>
+              <option value="送信" ${operation === '送信' ? 'selected' : ''}>送信</option>
+              <option value="その他" ${!['登録','更新','削除','照会','確認','承認','却下','検索','印刷','エクスポート','インポート','計算','集計','分析','通知','送信'].includes(operation) ? 'selected' : ''}>その他</option>
+            </select>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteOperation(${actorIndex}, ${screenIndex}, ${operationIndex})">
+            <span class="icon icon-delete"></span>
+          </button>
+        `;
+        fieldsContainer.appendChild(operationRow);
+      });
+
+      // データアクセス情報の編集
+      const dataAccessTitle = document.createElement('div');
+      dataAccessTitle.className = 'form-label';
+      dataAccessTitle.style.marginTop = '16px';
+      dataAccessTitle.style.marginBottom = '8px';
+      dataAccessTitle.style.color = '#007bff';
+      dataAccessTitle.style.fontWeight = '600';
+      dataAccessTitle.style.display = 'flex';
+      dataAccessTitle.style.justifyContent = 'space-between';
+      dataAccessTitle.style.alignItems = 'center';
+      dataAccessTitle.innerHTML = `
+        データアクセス:
+        <button class="btn btn-secondary btn-sm" onclick="addDataAccess(${actorIndex}, ${screenIndex})">
+          <span class="icon icon-add"></span>
+          データアクセス追加
+        </button>
+      `;
+      fieldsContainer.appendChild(dataAccessTitle);
+
+      // データアクセス項目がない場合は空の配列を初期化
+      if (!screen.data_access) {
+        screen.data_access = [];
+      }
+
+      screen.data_access.forEach((dataAccess, dataAccessIndex) => {
+        const dataAccessRow = document.createElement('div');
+        dataAccessRow.className = 'form-row';
+        dataAccessRow.style.display = 'flex';
+        dataAccessRow.style.gap = '8px';
+        dataAccessRow.style.alignItems = 'center';
+        
+        // エンティティ選択用のドロップダウンを作成
+        const entityOptions = entitiesData.map(entity => 
+          `<option value="${entity}" ${dataAccess.entity === entity ? 'selected' : ''}>${entity}</option>`
+        ).join('');
+        
+        dataAccessRow.innerHTML = `
+          <div class="form-label" style="min-width: 80px;">エンティティ:</div>
+          <select class="form-select" onchange="updateDataAccessEntity(${actorIndex}, ${screenIndex}, ${dataAccessIndex}, this.value)" style="min-width: 140px;">
+            <option value="">選択してください</option>
+            ${entityOptions}
+          </select>
+          <div class="form-label" style="min-width: 50px;">CRUD:</div>
+          <label style="color: #e0e0e0; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" ${dataAccess.CRUD.includes('C') ? 'checked' : ''} 
+                   onchange="updateDataAccessCRUD(${actorIndex}, ${screenIndex}, ${dataAccessIndex}, 'C', this.checked)"> C
+          </label>
+          <label style="color: #e0e0e0; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" ${dataAccess.CRUD.includes('R') ? 'checked' : ''} 
+                   onchange="updateDataAccessCRUD(${actorIndex}, ${screenIndex}, ${dataAccessIndex}, 'R', this.checked)"> R
+          </label>
+          <label style="color: #e0e0e0; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" ${dataAccess.CRUD.includes('U') ? 'checked' : ''} 
+                   onchange="updateDataAccessCRUD(${actorIndex}, ${screenIndex}, ${dataAccessIndex}, 'U', this.checked)"> U
+          </label>
+          <label style="color: #e0e0e0; display: flex; align-items: center; gap: 4px;">
+            <input type="checkbox" ${dataAccess.CRUD.includes('D') ? 'checked' : ''} 
+                   onchange="updateDataAccessCRUD(${actorIndex}, ${screenIndex}, ${dataAccessIndex}, 'D', this.checked)"> D
+          </label>
+          <button class="btn btn-danger btn-sm" onclick="deleteDataAccess(${actorIndex}, ${screenIndex}, ${dataAccessIndex})">
+            <span class="icon icon-delete"></span>
+          </button>
+        `;
+        
+        fieldsContainer.appendChild(dataAccessRow);
+      });
+
+      card.appendChild(cardHeader);
+      card.appendChild(fieldsContainer);
+      return card;
+    }
+
+    // フィールド行の作成
+    function createFieldRow(field, actorIndex, screenIndex, fieldIndex) {
+      const row = document.createElement('div');
+      row.className = 'form-row';
+
+      // バリエーション項目かどうかを判定
+      const isVariation = field.type !== 'string' && field.type !== 'number' && field.type !== 'date' && field.type !== 'time' && field.type !== 'variation' && field.type !== 'enum';
+
+      row.innerHTML = `
+        <div class="form-group">
+          <input type="text" class="form-input" value="${field.項目名}" 
+                 onchange="updateFieldName(${actorIndex}, ${screenIndex}, ${fieldIndex}, this.value)"
+                 placeholder="項目名">
+        </div>
+        <div class="form-group">
+          <select class="form-select" onchange="updateFieldType(${actorIndex}, ${screenIndex}, ${fieldIndex}, this.value)">
+            <option value="string" ${field.type === 'string' ? 'selected' : ''}>文字列</option>
+            <option value="number" ${field.type === 'number' ? 'selected' : ''}>数字</option>
+            <option value="date" ${field.type === 'date' ? 'selected' : ''}>日付</option>
+            <option value="time" ${field.type === 'time' ? 'selected' : ''}>時間</option>
+            <option value="enum" ${field.type === 'enum' ? 'selected' : ''}>列挙型</option>
+            <option value="variation" ${isVariation ? 'selected' : ''}>バリエーション</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" value="${field.tooltip || ''}" 
+                 onchange="updateFieldTooltip(${actorIndex}, ${screenIndex}, ${fieldIndex}, this.value)"
+                 placeholder="ツールチップ">
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="deleteField(${actorIndex}, ${screenIndex}, ${fieldIndex})">
+          <span class="icon icon-delete"></span>
+        </button>
+      `;
+
+      return row;
+    }
+
+    // タブ切り替え
+    function switchTab(tabIndex) {
+      // タブのアクティブ状態を更新
+      document.querySelectorAll('.tab').forEach((tab, index) => {
+        tab.classList.toggle('active', index === tabIndex);
+      });
+
+      // パネルの表示/非表示を切り替え
+      document.querySelectorAll('.panel').forEach((panel, index) => {
+        panel.classList.toggle('hidden', index !== tabIndex);
+      });
+    }
+
+    // 画面追加
+    function addScreen(actorIndex) {
+      const newScreen = {
+        screen_name: "新しい画面",
+        fields: [],
+        operations: [],
+        data_access: []
+      };
+
+      currentBUC.actors[actorIndex].screens.push(newScreen);
+      renderPanels();
+    }
+
+    // 画面削除
+    function deleteScreen(actorIndex, screenIndex) {
+      if (confirm('この画面を削除しますか？')) {
+        currentBUC.actors[actorIndex].screens.splice(screenIndex, 1);
+        renderPanels();
+      }
+    }
+
+    // フィールド追加
+    function addField(actorIndex, screenIndex) {
+      const newField = {
+        項目名: "新しい項目",
+        type: "string",
+        tooltip: ""
+      };
+
+      currentBUC.actors[actorIndex].screens[screenIndex].fields.push(newField);
+      renderPanels();
+    }
+
+    // フィールド削除
+    function deleteField(actorIndex, screenIndex, fieldIndex) {
+      if (confirm('この項目を削除しますか？')) {
+        currentBUC.actors[actorIndex].screens[screenIndex].fields.splice(fieldIndex, 1);
+        renderPanels();
+      }
+    }
+
+    // フィールド名更新
+    function updateFieldName(actorIndex, screenIndex, fieldIndex, value) {
+      currentBUC.actors[actorIndex].screens[screenIndex].fields[fieldIndex].項目名 = value;
+    }
+
+    // フィールドタイプ更新
+    function updateFieldType(actorIndex, screenIndex, fieldIndex, value) {
+      const field = currentBUC.actors[actorIndex].screens[screenIndex].fields[fieldIndex];
+      
+      // バリエーションを選択した場合、既存のtype値をバリエーション値として保存
+      if (value === 'variation') {
+        // 既存のtypeが基本タイプでない場合、それをバリエーション値として保持
+        if (field.type !== 'string' && field.type !== 'number' && field.type !== 'date' && field.type !== 'time' && field.type !== 'variation' && field.type !== 'enum') {
+          field.variation_value = field.type; // 既存の値をバリエーション値として保存
+        }
+        field.type = 'variation';
+      } else {
+        field.type = value;
+        // 基本タイプに変更した場合、バリエーション値をクリア
+        if (field.variation_value) {
+          delete field.variation_value;
+        }
+      }
+    }
+    // フィールドツールチップ更新
+    function updateFieldTooltip(actorIndex, screenIndex, fieldIndex, value) {
+      currentBUC.actors[actorIndex].screens[screenIndex].fields[fieldIndex].tooltip = value;
+    }
+
+    // 操作追加
+    function addOperation(actorIndex, screenIndex) {
+      if (!currentBUC.actors[actorIndex].screens[screenIndex].operations) {
+        currentBUC.actors[actorIndex].screens[screenIndex].operations = [];
+      }
+      currentBUC.actors[actorIndex].screens[screenIndex].operations.push("登録");
+      renderPanels();
+    }
+
+    // 操作削除
+    function deleteOperation(actorIndex, screenIndex, operationIndex) {
+      if (confirm('この操作を削除しますか？')) {
+        currentBUC.actors[actorIndex].screens[screenIndex].operations.splice(operationIndex, 1);
+        renderPanels();
+      }
+    }
+
+    // 操作更新
+    function updateOperation(actorIndex, screenIndex, operationIndex, value) {
+      currentBUC.actors[actorIndex].screens[screenIndex].operations[operationIndex] = value;
+    }
+
+    // データアクセス追加
+    function addDataAccess(actorIndex, screenIndex) {
+      if (!currentBUC.actors[actorIndex].screens[screenIndex].data_access) {
+        currentBUC.actors[actorIndex].screens[screenIndex].data_access = [];
+      }
+      const newDataAccess = {
+        entity: "",
+        CRUD: ["R"]
+      };
+      currentBUC.actors[actorIndex].screens[screenIndex].data_access.push(newDataAccess);
+      renderPanels();
+    }
+
+    // データアクセス削除
+    function deleteDataAccess(actorIndex, screenIndex, dataAccessIndex) {
+      if (confirm('このデータアクセスを削除しますか？')) {
+        currentBUC.actors[actorIndex].screens[screenIndex].data_access.splice(dataAccessIndex, 1);
+        renderPanels();
+      }
+    }
+
+    // データアクセスエンティティ更新
+    function updateDataAccessEntity(actorIndex, screenIndex, dataAccessIndex, value) {
+      currentBUC.actors[actorIndex].screens[screenIndex].data_access[dataAccessIndex].entity = value;
+    }
+
+    // データアクセスCRUD更新
+    function updateDataAccessCRUD(actorIndex, screenIndex, dataAccessIndex, crudType, checked) {
+      const dataAccess = currentBUC.actors[actorIndex].screens[screenIndex].data_access[dataAccessIndex];
+      if (checked) {
+        if (!dataAccess.CRUD.includes(crudType)) {
+          dataAccess.CRUD.push(crudType);
+        }
+      } else {
+        dataAccess.CRUD = dataAccess.CRUD.filter(c => c !== crudType);
+      }
+    }
+
+    // 画面名更新
+    function updateScreenName(actorIndex, screenIndex, value) {
+      currentBUC.actors[actorIndex].screens[screenIndex].screen_name = value;
+    }
+
+    // データ保存
+    async function saveData() {
+      try {
+        const response = await fetch('/api/ui', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(uiData)
+        });
+
+        if (!response.ok) {
+          throw new Error('保存に失敗しました');
+        }
+
+        const result = await response.json();
+        alert('データを保存しました');
+      } catch (error) {
+        console.error('保存エラー:', error);
+        alert('保存に失敗しました: ' + error.message);
+      }
+    }
+
+    // サーバーを停止して画面を閉じる
+    async function closeAndStopServer() {
+      if (confirm('サーバーを停止して画面を閉じますか？')) {
+        try {
+          // サーバーにシャットダウンリクエストを送信
+          await fetch('/shutdown');
+          // 少し待ってからウィンドウを閉じる
+          setTimeout(() => {
+            window.close();
+            // window.close()が動作しない場合の代替メッセージ
+            document.body.innerHTML = '<div style="text-align:center; padding:50px; font-size:18px; color: #ffffff;">サーバーが停止しました。<br>このタブを閉じてください。</div>';
+          }, 200);
+        } catch (error) {
+          console.error('シャットダウンエラー:', error);
+          alert('サーバーの停止に失敗しました。メニューから手動で停止してください。');
+        }
+      }
+    }
+
+    // 初期化
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+    });
+  </script>
+</body>
+</html> 

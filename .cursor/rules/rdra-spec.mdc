@@ -1,0 +1,23 @@
+---
+globs: .cursor/commands/03-spec/*
+alwaysApply: false
+---
+
+# RDRA SPEC実行ルール
+
+## 作成ファイル
+
+作成するプログラムは以下の３種類に限る
+- javascript
+- html
+- css:cssはhtmlに含める
+ 
+## 使用GUIライブラリ
+
+- shadcn
+  - https://ui.shadcn.com/docs/components
+
+## テキストの文字列コード
+
+- UTF8
+

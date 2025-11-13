@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アクター別画面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .window-header {
+            background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+            padding: 12px 16px;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .close-button:hover {
+            background: #c82333;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 5px;
+            padding: 10px 10px 0 10px;
+            background: #f9f9f9;
+            border-bottom: 7px solid #008cff;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            color: #666;
+            font-size: 17px;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #008cff;
+            color: white;
+            border-color: #008cff;
+        }
+
+        .tab:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            min-height: 500px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 150px;
+            padding: 10px;
+            background: #fafafa;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+
+        .sidebar-right {
+            border-right: none;
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .screen-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .screen-card:hover {
+            border-color: #008cff;
+            box-shadow: 0 2px 4px rgba(0, 140, 255, 0.2);
+        }
+
+        .screen-card.selected {
+            border-color: #008cff;
+            background: #e6f4ff;
+        }
+
+        .screen-card-title {
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .screen-card-subtitle {
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .screen-card-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        .screen-card-field-label {
+            color: #666;
+        }
+
+        .screen-card-field-value {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 2px 6px;
+            border-radius: 2px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .main-header {
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .screen-detail {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+
+        .screen-name {
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .content-layout {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .field-list {
+            flex: 0 0 90px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .field-item {
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .screen-detail-panel {
+            flex: 1;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            width: 100px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .detail-value {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            border-radius: 2px;
+            font-size: 12px;
+            flex: 1;
+        }
+
+        .detail-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 2px solid #ddd;
+            border-radius: 2px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .detail-input:focus {
+            outline: none;
+            border-color: #008cff;
+            box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.1);
+        }
+
+        select.detail-input {
+            cursor: pointer;
+            background-color: white;
+        }
+
+        input[type="date"].detail-input {
+            cursor: pointer;
+        }
+
+        .data-list {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .data-list:hover {
+            border-color: #008cff;
+            background: #f0f8ff;
+        }
+
+        .data-list.active {
+            border-color: #008cff;
+            background: #e6f4ff;
+        }
+
+        .data-list-id {
+            font-weight: bold;
+            color: #008cff;
+            margin-right: 8px;
+        }
+
+        .data-list-name {
+            color: #333;
+        }
+
+        .operations-section,
+        .data-access-section {
+            margin-top: 20px;
+        }
+
+        .section-title {
+            background: #f0f0f0;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .operations-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .operation-button {
+            background: white;
+            border: 1px solid #008cff;
+            color: #008cff;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .operation-button:hover {
+            background: #008cff;
+            color: white;
+        }
+
+        .data-access-item {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .entity-name {
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .crud-badges {
+            display: inline-flex;
+            gap: 5px;
+        }
+
+        .crud-badge {
+            background: #e6f4ff;
+            color: #008cff;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .more-indicator {
+            text-align: center;
+            padding: 10px;
+            color: #999;
+            font-size: 20px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="window-header">
+            <span>アクター別画面</span>
+            <button class="close-button" onclick="closeAndStopServer()">閉じる</button>
+        </div>
+        
+        <div class="tabs-container" id="actorTabs">
+            <!-- Actorタブはここに動的に生成 -->
+        </div>
+
+        <div class="content-area">
+            <!-- 左サイドバー -->
+            <div class="sidebar" id="leftSidebar">
+                <!-- 画面カードはここに動的に生成 -->
+            </div>
+
+            <!-- メインコンテンツ -->
+            <div class="main-content">
+                <div class="main-header" id="mainHeader">業務/BUC</div>
+                <div class="screen-detail" id="screenDetail">
+                    <div class="empty-state">左側の画面を選択してください</div>
+                </div>
+            </div>
+
+            <!-- 右サイドバー -->
+            <div class="sidebar sidebar-right" id="rightSidebar">
+                <!-- 画面カードはここに動的に生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let actorData = null;
+        let currentActor = null;
+        let currentScreen = null;
+
+        // データを読み込んでUIを初期化
+        async function initializeApp() {
+            try {
+                const response = await fetch('actor_ui.json');
+                actorData = await response.json();
+                
+                if (actorData.actors && actorData.actors.length > 0) {
+                    renderActorTabs();
+                    // 初期表示時は先頭アクターを選択し、先頭画面を表示
+                    selectActor(actorData.actors[0].actor_name, true);
+                }
+            } catch (error) {
+                console.error('データの読み込みに失敗しました:', error);
+                document.getElementById('screenDetail').innerHTML = 
+                    '<div class="empty-state">データの読み込みに失敗しました</div>';
+            }
+        }
+
+        // Actorタブを生成
+        function renderActorTabs() {
+            const tabsContainer = document.getElementById('actorTabs');
+            tabsContainer.innerHTML = '';
+
+            actorData.actors.forEach(actor => {
+                const tab = document.createElement('div');
+                tab.className = 'tab';
+                tab.textContent = actor.actor_name;
+                // タブ選択時は先頭画面を表示
+                tab.onclick = () => selectActor(actor.actor_name, true);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        // Actorを選択
+        function selectActor(actorName, autoSelectFirst = false) {
+            currentActor = actorData.actors.find(a => a.actor_name === actorName);
+            currentScreen = null;
+
+            // タブのアクティブ状態を更新
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === actorName);
+            });
+
+            renderScreenCards(autoSelectFirst);
+            if (!autoSelectFirst) {
+                clearScreenDetail();
+            }
+        }
+
+        // 画面カードを生成
+        function renderScreenCards(autoSelectFirst = false) {
+            const leftSidebar = document.getElementById('leftSidebar');
+            const rightSidebar = document.getElementById('rightSidebar');
+            
+            leftSidebar.innerHTML = '';
+            rightSidebar.innerHTML = '';
+
+            if (!currentActor || !currentActor.businesses) {
+                return;
+            }
+
+            const allScreens = [];
+
+            // 全画面を収集
+            currentActor.businesses.forEach(business => {
+                business.BUCs.forEach(buc => {
+                    buc.screens.forEach(screen => {
+                        allScreens.push({
+                            business: business.business_name,
+                            buc: buc.buc_name,
+                            screen: screen
+                        });
+                    });
+                });
+            });
+
+            // 左右に分割（奇数の場合は左側を1つ多く）
+            const midPoint = Math.ceil(allScreens.length / 2);
+            const leftScreens = allScreens.slice(0, midPoint);
+            const rightScreens = allScreens.slice(midPoint);
+
+            // 左サイドバー
+            leftScreens.forEach((item, index) => {
+                leftSidebar.appendChild(createScreenCard(item, index));
+            });
+
+            // 右サイドバー
+            rightScreens.forEach((item, index) => {
+                rightSidebar.appendChild(createScreenCard(item, index + midPoint));
+            });
+
+            // 初期表示時に先頭画面を自動選択
+            if (autoSelectFirst && allScreens.length > 0) {
+                setTimeout(() => {
+                    const firstCard = leftSidebar.querySelector('.screen-card');
+                    if (firstCard) {
+                        firstCard.click();
+                    }
+                }, 0);
+            }
+        }
+
+        // 画面カードを作成
+        function createScreenCard(item, index) {
+            const card = document.createElement('div');
+            card.className = 'screen-card';
+            card.onclick = () => selectScreen(item);
+
+            const title = document.createElement('div');
+            title.className = 'screen-card-title';
+            title.textContent = `${item.business}\n${item.buc}`;
+            title.style.whiteSpace = 'pre-line';
+
+            const subtitle = document.createElement('div');
+            subtitle.className = 'screen-card-subtitle';
+            subtitle.textContent = item.screen.screen_name;
+
+            card.appendChild(title);
+            card.appendChild(subtitle);
+
+            // フィールドを3つまで表示
+            const fields = item.screen.fields.slice(0, 3);
+            fields.forEach(field => {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'screen-card-field';
+
+                const label = document.createElement('span');
+                label.className = 'screen-card-field-label';
+                label.textContent = field.項目名;
+
+                const value = document.createElement('span');
+                value.className = 'screen-card-field-value';
+                value.textContent = '　';
+
+                fieldDiv.appendChild(label);
+                fieldDiv.appendChild(value);
+                card.appendChild(fieldDiv);
+            });
+
+            return card;
+        }
+
+        // 画面を選択
+        function selectScreen(item) {
+            currentScreen = item;
+
+            // カードの選択状態を更新
+            document.querySelectorAll('.screen-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            renderScreenDetail();
+        }
+
+        // 入力タイプを判定
+        function getInputType(field) {
+            const fieldName = field.項目名;
+            const fieldType = field.type;
+            
+            // 日付フィールド
+            if (fieldName.includes('日') || fieldType === 'date') {
+                return 'date';
+            }
+            
+            // 数値フィールド
+            if (fieldType === 'number') {
+                return 'number';
+            }
+            
+            // バリエーション（セレクトボックス）
+            const variationTypes = ['会員種別', '予約状態', '購入状態', '廃棄理由', '図書館種別', 
+                                   '蔵書カテゴリ', '配送状態', '蔵書状態', '購入元'];
+            if (variationTypes.includes(fieldType)) {
+                return 'select';
+            }
+            
+            // デフォルトはテキスト
+            return 'text';
+        }
+
+        // セレクトボックスのオプションを取得
+        function getSelectOptions(fieldType) {
+            const options = {
+                '会員種別': ['一般会員', '学生会員', '高齢者会員', '法人会員'],
+                '予約状態': ['予約中', '準備完了', '受取済み', 'キャンセル'],
+                '購入状態': ['発注済み', '入荷待ち', '受入済み'],
+                '廃棄理由': ['破損', '紛失', '古書', 'その他'],
+                '図書館種別': ['中央図書館', '東図書館', '西図書館', '南図書館', '北図書館'],
+                '蔵書カテゴリ': ['文学', '歴史', '科学', '芸術', '社会科学'],
+                '配送状態': ['準備中', '配送中', '配送完了'],
+                '蔵書状態': ['貸出可能', '貸出中', '予約済み', '修理中'],
+                '購入元': ['書店A', '書店B', 'オンライン']
+            };
+            return options[fieldType] || [];
+        }
+
+        // 画面詳細を表示
+        function renderScreenDetail() {
+            if (!currentScreen) {
+                clearScreenDetail();
+                return;
+            }
+
+            const mainHeader = document.getElementById('mainHeader');
+            mainHeader.textContent = `${currentScreen.business} / ${currentScreen.buc}`;
+
+            const detailContainer = document.getElementById('screenDetail');
+            detailContainer.innerHTML = '';
+
+            // 画面名
+            const screenName = document.createElement('div');
+            screenName.className = 'screen-name';
+            screenName.textContent = currentScreen.screen.screen_name;
+            detailContainer.appendChild(screenName);
+
+            // フィールドリストと詳細パネル
+            const contentLayout = document.createElement('div');
+            contentLayout.className = 'content-layout';
+
+            // 左側：データリスト（画面のvaluesを使用）
+            const fieldList = document.createElement('div');
+            fieldList.className = 'field-list';
+            
+            // 画面のvaluesを取得（存在しない場合はデフォルト値）
+            const values = currentScreen.screen.values || ['データ1', 'データ2', 'データ3'];
+            
+            values.forEach((value, index) => {
+                const dataItem = document.createElement('div');
+                dataItem.className = 'data-list';
+                if (index === 0) dataItem.classList.add('active');
+                
+                const idSpan = document.createElement('span');
+                idSpan.className = 'data-list-id';
+                idSpan.textContent = String(index + 1).padStart(3, '0');
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'data-list-name';
+                nameSpan.textContent = value;
+                
+                dataItem.appendChild(idSpan);
+                dataItem.appendChild(nameSpan);
+                dataItem.onclick = () => {
+                    document.querySelectorAll('.data-list').forEach(d => d.classList.remove('active'));
+                    dataItem.classList.add('active');
+                };
+                fieldList.appendChild(dataItem);
+            });
+            contentLayout.appendChild(fieldList);
+
+            // 右側：全項目を入力コンポーネントで表示
+            const detailPanel = document.createElement('div');
+            detailPanel.className = 'screen-detail-panel';
+            currentScreen.screen.fields.forEach(field => {
+                const row = document.createElement('div');
+                row.className = 'detail-row';
+
+                const label = document.createElement('div');
+                label.className = 'detail-label';
+                label.textContent = field.項目名;
+
+                const valueDiv = document.createElement('div');
+                valueDiv.className = 'detail-value';
+
+                const inputType = getInputType(field);
+                
+                if (inputType === 'select') {
+                    const select = document.createElement('select');
+                    select.className = 'detail-input';
+                    
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = '-- 選択してください --';
+                    select.appendChild(defaultOption);
+                    
+                    const options = getSelectOptions(field.type);
+                    options.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt;
+                        option.textContent = opt;
+                        select.appendChild(option);
+                    });
+                    
+                    valueDiv.appendChild(select);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = inputType;
+                    input.className = 'detail-input';
+                    input.placeholder = field.tooltip || field.type;
+                    valueDiv.appendChild(input);
+                }
+
+                row.appendChild(label);
+                row.appendChild(valueDiv);
+                detailPanel.appendChild(row);
+            });
+            contentLayout.appendChild(detailPanel);
+
+            detailContainer.appendChild(contentLayout);
+
+            // 機能セクション
+            if (currentScreen.screen.operations && currentScreen.screen.operations.length > 0) {
+                const opsSection = document.createElement('div');
+                opsSection.className = 'operations-section';
+
+                const opsTitle = document.createElement('div');
+                opsTitle.className = 'section-title';
+                opsTitle.textContent = '機能';
+                opsSection.appendChild(opsTitle);
+
+                const opsList = document.createElement('div');
+                opsList.className = 'operations-list';
+                currentScreen.screen.operations.forEach(op => {
+                    const opButton = document.createElement('button');
+                    opButton.className = 'operation-button';
+                    opButton.textContent = op;
+                    opsList.appendChild(opButton);
+                });
+                opsSection.appendChild(opsList);
+
+                detailContainer.appendChild(opsSection);
+            }
+
+            // データアクセスセクション
+            if (currentScreen.screen.data_access && currentScreen.screen.data_access.length > 0) {
+                const dataSection = document.createElement('div');
+                dataSection.className = 'data-access-section';
+
+                currentScreen.screen.data_access.forEach(access => {
+                    const dataItem = document.createElement('div');
+                    dataItem.className = 'data-access-item';
+
+                    const entityName = document.createElement('span');
+                    entityName.className = 'entity-name';
+                    entityName.textContent = access.entity;
+                    dataItem.appendChild(entityName);
+
+                    const crudBadges = document.createElement('span');
+                    crudBadges.className = 'crud-badges';
+                    access.CRUD.forEach(crud => {
+                        const badge = document.createElement('span');
+                        badge.className = 'crud-badge';
+                        badge.textContent = crud;
+                        crudBadges.appendChild(badge);
+                    });
+                    dataItem.appendChild(crudBadges);
+
+                    dataSection.appendChild(dataItem);
+                });
+
+                detailContainer.appendChild(dataSection);
+            }
+        }
+
+        // 画面詳細をクリア
+        function clearScreenDetail() {
+            const mainHeader = document.getElementById('mainHeader');
+            mainHeader.textContent = '業務/BUC';
+
+            const detailContainer = document.getElementById('screenDetail');
+            detailContainer.innerHTML = '<div class="empty-state">左側の画面を選択してください</div>';
+        }
+
+        // サーバーを停止して画面を閉じる
+        async function closeAndStopServer() {
+            if (confirm('サーバーを停止して画面を閉じますか？')) {
+                try {
+                    // サーバーにシャットダウンリクエストを送信
+                    await fetch('/shutdown');
+                    // 少し待ってからウィンドウを閉じる
+                    setTimeout(() => {
+                        window.close();
+                        // window.close()が動作しない場合の代替メッセージ
+                        document.body.innerHTML = '<div style="text-align:center; padding:50px; font-size:18px;">サーバーが停止しました。<br>このタブを閉じてください。</div>';
+                    }, 200);
+                } catch (error) {
+                    console.error('シャットダウンエラー:', error);
+                    alert('サーバーの停止に失敗しました。メニューから手動で停止してください。');
+                }
+            }
+        }
+
+        // アプリケーション起動
+        initializeApp();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,9 @@
+---
+globs: .cursor/commands/01-zeroone/*
+alwaysApply: false
+---
+
+## tsvファイルに出力するときの決まり事
+
+- 「⇒」はタブ区切り文字に変換して出力する
+- tsvファイルは１行目をヘッダー行としてカラム名を出力する
