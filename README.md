@@ -19,6 +19,18 @@ CursorのCommandでRDRA（Relationship Driven Requirement Analysis）手法を�
 - **Node.js**: バージョン18以上推奨
 - **Agent**: Cursor（Proプラン以上推奨）
 
+## 推奨拡張機能
+
+Cursorでより快適に作業するために、以下の拡張機能のインストールを推奨します：
+
+- **[Edit csv](https://marketplace.visualstudio.com/items?itemName=janisdd.vscode-edit-csv)** (`janisdd.vscode-edit-csv`)
+  - CSVファイルを表形式で編集できる拡張機能
+  - `妥当性検証環境.csv` や出力されるTSVファイルをを編集する際に便利です
+
+- **[Markdown Preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced)** (`shd101wyy.markdown-preview-enhanced`)
+  - Mermaid図表に対応したMarkdownプレビュー拡張機能
+  - 論理データモデルを確認する際に便利です
+
 ## インストール方法
 
 ### 方法: GitHubから直接ダウンロード
