@@ -19,6 +19,18 @@ CursorのCommandでRDRA（Relationship Driven Requirement Analysis）手法を�
 - **Node.js**: バージョン18以上推奨
 - **Agent**: Cursor（Proプラン以上推奨）
 
+## 推奨拡張機能
+
+Cursorでより快適に作業するために、以下の拡張機能のインストールを推奨します：
+
+- **[Edit csv](https://marketplace.visualstudio.com/items?itemName=janisdd.vscode-edit-csv)** (`janisdd.vscode-edit-csv`)
+  - CSVファイルを表形式で編集できる拡張機能
+  - `妥当性検証環境.csv` や出力されるTSVファイルをを編集する際に便利です
+
+- **[Markdown Preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced)** (`shd101wyy.markdown-preview-enhanced`)
+  - Mermaid図表に対応したMarkdownプレビュー拡張機能
+  - 論理データモデルを確認する際に便利です
+
 ## インストール方法
 
 ### 方法: GitHubから直接ダウンロード
@@ -162,6 +174,14 @@ UI仕様をブラウザで表示・編集
 ## 基本的な作業の流れ
 
 1. **初期準備**
+  - `初期要望.sample.txt` をコピーして `初期要望.txt` を作成する
+    ```bash
+    # macOS/Linux
+    cp 初期要望.sample.txt 初期要望.txt
+    
+    # Windows
+    copy 初期要望.sample.txt 初期要望.txt
+    ```
   - `初期要望.txt` にシステム要求を記述
   - `Samples/` フォルダーのサンプルを参考にする
 
@@ -173,6 +193,14 @@ UI仕様をブラウザで表示・編集
   - 要件の関連性を図で確認
 
 4. **RDRA検証**
+  - `妥当性検証環境.sample.csv` をコピーして `妥当性検証環境.csv` を作成する
+    ```bash
+    # macOS/Linux
+    cp 妥当性検証環境.sample.csv 妥当性検証環境.csv
+    
+    # Windows
+    copy 妥当性検証環境.sample.csv 妥当性検証環境.csv
+    ```
   - `妥当性検証環境.csv` にシステム要求を記述
   - `Samples/` フォルダーのサンプルを参考にする
   - CursorのChatで`/`を入力後、`/02-RDRA/04-RDRA定義の妥当性検証`を選択し、実行する

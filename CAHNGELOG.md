@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2025-11-15
+
+### Changed
+
+- gitignoreのファイル追加
+  - 成果物フォルダ下の`.keep`以外のファイル
+    - `/0_RDRAZeroOne`
+    - `/1_RDRA`
+    - `/2_RDRASpec`
+  - `初期要望.txt`
+  - `妥当性検証環境.csv`
+- ファイル名の変更
+  - `/初期要望.txt` → `/初期要望.sample.txt`
+  - `/妥当性検証環境.csv` → `/妥当性検証環境.sample.csv`
+- READMEの修正
+  - `初期要望.txt`と`妥当性検証環境.csv`の作り方を追記
+  - 推奨拡張機能の追記
+
+
 ## [0.6.0] - 2025-11-13
 
 ### Added

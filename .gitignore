@@ -1,2 +1,11 @@
 # asdf
 .tool-versions
+
+# output files
+0_RDRAZeroOne/*
+1_RDRA/*
+2_RDRASpec/*
+
+# input files
+初期要望.txt
+妥当性検証環境.csv
