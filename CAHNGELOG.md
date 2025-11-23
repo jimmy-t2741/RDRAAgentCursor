@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### changed
+
+- 妥当性検証ストーリー作成ナレッジの追加
+  - `/2_RDRASpec/Validation/Spec妥当性検証ストーリー.md`
+
 ## [0.6.1] - 2025-11-15
 
 ### Changed
