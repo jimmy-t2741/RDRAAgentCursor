@@ -271,6 +271,7 @@ UI仕様をブラウザで表示・編集
   - `21_data.md` - 論理データモデル作成方法
   - `22_ui.md` - UI定義作成方法
   - `23_business_rule.md` - ビジネスルール作成方法
+  - `specScenarioStory.md` - 仕様妥当性検証ストーリー作成方法
   - `specValidation.md` - 仕様妥当性検証方法
 
 ## ファイルフォーマット
