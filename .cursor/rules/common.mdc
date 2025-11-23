@@ -23,11 +23,14 @@ alwaysApply: true
 - 生成物を保持するフォルダー
 - フェーズ３とフェーズ４の生成物を保持するフォルダー
 - 関連データ.txt:RDRAGraphのためのデータ
+- 要件の妥当性検証結果を出力を保持する
 
 ### 「2_RDRASpec」フォルダー
 
 - 生成物を保持するフォルダー
 - 仕様ファイルを保持するフォルダー
+- 論理データとprototypeの生成物が保持される
+- 仕様の妥当性検証結果を出力を保持する
 
 ### 「RDRA_Knowledge/0_RDRAZeroOne」フォルダー
 
@@ -40,7 +43,7 @@ alwaysApply: true
 
 - RDRA.md:RDRAの考え方をまとめたファイル
 - RDRASheet.md:RDRA定義をSpreadsheetで行う各シートのフォーマットの説明、各シート内のモデルは「RDRA.md」で定義したモデルに対応する
-- RDRAGraph.md:RDRAGraphのデータ構造「関連データ」の説明
+- RDRAGraph.md:RDRAGraphのデータ構造「関連データ.txt」の説明
 
 ### 「RDRA_Knowledge/2_RDRASpec」フォルダー
 
@@ -48,10 +51,7 @@ alwaysApply: true
 - 22_ui.md:ユースケースと画面の関係から画面のUI定義を生成する方法を記述したファイル
 - 23_business_rule.md:ビジネスルールモジュールを定義する方法を記述したファイル
 - specValidation.md:仕様の妥当性検証方法を記述したファイル
-
-### 「RDRA_Knowledge/2_RDRASpec/Validation」フォルダー
-
-論理データとprototypeの生成物が保持される
+- specScenarioStory.md:仕様のストーリー作成方法を記述したファイル
 
 ### 「RDRA_Knowledge/helper_tools」フォルダー
 
