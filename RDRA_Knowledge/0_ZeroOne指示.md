@@ -1,4 +1,5 @@
 # 以下のPhaseで「RDRA_Knowledge/1_RDRA/RDRA.md」のRDRAの考え方に基づいて「初期要望.txt」に定義された「システム要求」を実現するRDRA定義をRDRASheetに変換します
+
 - ビジネスコンサルタントとしてベストの提案を行ってください
 - 実行内容はRDRAZeroOne.mdのフェーズとして記述されており、実行は以下のPhase毎に実行します
 - Phase内の個々のファイル作成を指示された場合は、そのファイル作成だけを行う
@@ -8,63 +9,78 @@
 - 「初期要望.txt」に定義された「システム要求」を分析し、その要求に答えるために必要なビジネスとシステムを考察します
 
 ## Phase1
-- Phase1で作成するファイルは「/0_RDRAZeroOne/phase1」フォルダーの中に出力する
-- Phase1の実行を指示された場合は「/RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ１を実行する
+
+- Phase1で作成するファイルは「0_RDRAZeroOne/phase1」フォルダーの中に出力する
+- Phase1の実行を指示された場合は「RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ１を実行する
 - Phase1内のファイル作成を指示された場合は該当ファイルの作成だけを行う
 - 実行後出力したファイルの内容を確認し、人が行うことを表示する
 
 ## Phase2
-- Phase2で作成するファイルは「/0_RDRAZeroOne/phase2」フォルダーの中に出力する
-フェーズ１の出力結果は人によって見直されているので、その内容に従ってフェーズ２を実行する
-- Phase2の実行を指示された場合は「/RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ２を実行する
+
+- Phase2で作成するファイルは「0_RDRAZeroOne/phase2」フォルダーの中に出力する
+- フェーズ１の出力結果は人によって見直されているので、その内容に従ってフェーズ２を実行する
+- Phase2の実行を指示された場合は「RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ２を実行する
 - Phase2内のファイル作成を指示された場合は該当ファイルの作成だけを行う
 - 実行後出力したファイルの内容を確認し、人が行うことを表示する
 
 ## Phase3
-- Phase3で作成するファイルは「/0_RDRAZeroOne/phase3」フォルダーの中に出力する
+
+- Phase3で作成するファイルは「0_RDRAZeroOne/phase3」フォルダーの中に出力する
 - フェーズ１、フェーズ２の出力結果を元に以下の指示に従ってください
-- Phase3の実行を指示された場合は「/RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェー- ズ３を実行する
+- Phase3の実行を指示された場合は「RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェー- ズ３を実行する
 - Phase3内のファイル作成を指示された場合は該当ファイルの作成だけを行う
 - 実行後出力したファイルの内容を確認し、人が行うことを表示する
 
 ## Phase4
-- Phase4で作成するファイルは「/0_RDRAZeroOne/phase4」フォルダーの中に出力する
+
+- Phase4で作成するファイルは「0_RDRAZeroOne/phase4」フォルダーの中に出力する
 - フェーズ３の出力結果を元に以下の指示に従ってください
-- 「/RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ４を実行する
-- Phase4の実行を指示された場合は「/RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ４を実行する
+- 「RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ４を実行する
+- Phase4の実行を指示された場合は「RDRA_Knowledge/0_RDRAZeroOne/RDRAZeroOne.md」のフェーズ４を実行する
 - Phase4内のファイル作成を指示された場合は該当ファイルの作成だけを行う
 - 実行後出力したファイルの内容を確認し、人が行うことを表示する
 
 ## Phase5
-- start process RDRA_Knowledge/helper_tools/rdraFileCopy.js
-- システム名とシステム概要の作成
 
-### システム名の洗出し
+### 以下のコマンドでPhase3,Phase4の生成ファイルを「1_RDRA」フォルダー内にコピーする
+
+- start process RDRA_Knowledge/helper_tools/rdraFileCopy.js
+
+### システム名とシステム概要の作成
+
+#### システム名の洗出し
+
 - 「初期要望.txt」の内容からシステム名を抽出する
 
-### システム概要の洗出し
+#### システム概要の洗出し
+
 - 「初期要望.txt」の内容を要約しシステム概要を生成する
 
-### 出力レイアウト
+#### 出力レイアウト
+
 - {"system_name":システム名,"system_overview":システム概要}
 
-### ファイルへの出力
+#### ファイルへの出力
+
 - 「システム概要.json」名で「1_RDRA」フォルダーに出力する
 
 ## エラー処理仕様
+
 ### ファイル作成失敗時
+
 - 原因を特定し、具体的な修正方法を提示
+
 - 前フェーズの出力不備の場合は該当フェーズの再実行を促す
 
 ### フォーマット不正時
+
 - 不正行を特定し、正しいフォーマット例を提示
 - 部分修正が可能な場合は修正案を提示
 
 # 実行単位
+
 - Phaseが指示された時はそのPhaseだけを実行する　
 - ファイルが指示された時はそのファイルだけを実行する　
 - 実行後出力したファイルの内容を確認し、必要があれば修正するようにメッセージを表示する
 
 Think Hard
-
-
