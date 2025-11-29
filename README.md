@@ -33,8 +33,9 @@ Cursorでより快適に作業するために、以下の拡張機能のイン�
 
 ## インストール方法
 
-### 方法: GitHubから直接ダウンロード
+### 方法1: GitHubから直接ダウンロード
 
+[リリースページ](https://github.com/jimmy-t2741/RDRAAgentCursor/releases)から最新版をダウンロードしてください。
 Zipでダウンロードする：「Download Zip」を選択する
 
 ### 方法2: リポジトリをクローンして直接使用
