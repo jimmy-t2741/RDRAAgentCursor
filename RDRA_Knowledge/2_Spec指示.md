@@ -58,19 +58,6 @@
 
 - 「RDRA_Knowledge/2_RDRASpec/specValidation.md」を実行し、「Spec妥当性検証結果.md」の名前で「2_RDRASpec/Validation」に出力する
 
-# phase3: プロトタイプ環境作成
-
-## 「2_RDRASpec/論理データモデル.md」を読込み深く理解する
-
-## プロトタイプ用データの作成
-
-- Step1: 「RDRA_Knowledge/2_RDRASpec/24_actor.md」を実行し、「youser.json」の名前で「2_RDRASpec」に出力する
-- Step2: 「RDRA_Knowledge/2_RDRASpec/25_prototype_data.md」を実行し、「prototype_data.json」という名前で「2_RDRASpec」に出力する
-
-# 指示されたPhaseを実行してください
-
-実行するときは毎回、前提を理解してから実行する。
-
 Think Hard
 
 
