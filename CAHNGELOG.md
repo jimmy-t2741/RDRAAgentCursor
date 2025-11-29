@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### changed
 
-- 妥当性検証ストーリー作成ナレッジの追加
-  - `/2_RDRASpec/Validation/Spec妥当性検証ストーリー.md`
 - フォルダー構成のルール修正
   - `/.cursor/rules/common.mdc`
 - RDRAZeroOne指示ファイルの修正
   - `/RDRA_Knowledge/0_ZeroOne指示.md`
+- Spec指示ファイルの修正
+  - `/RDRA_Knowledge/2_Spec指示.mds`
 - 不要な処理の削除
   - `/RDRA_Knowledge/helper_tools/makeZeroOneData.js`
 - RDRAスプレッドシート展開コマンド実行後の出力メッセージの修正
