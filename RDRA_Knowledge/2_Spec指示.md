@@ -31,7 +31,7 @@
 「23_business_rule.md」のビジネスルールモジュールを定義する。
 作成したビジネスルールは「2_RDRASpec」フォルダーに「business_rule.md」名で出力する。
 
-# phase2: 仕様のストーリーを作成する
+# phase2: 仕様の妥当性を検証する
 
 ## 検証対象
 
@@ -45,11 +45,7 @@
 
 - 「1_RDRA/Validation/RDRA説明.md」を読込、個別のストーリーの違いを理解する
 
-## step1:ストーリーの作成
-
-- 「RDRA_Knowledge/2_RDRASpec/specScenarioStory.md」を実行し、「2_RDRASpec/Validation」に出力する
-
-## step2: 仕様の妥当性検証
+## phase1の成果物の妥当性検証
 
 ### phase1で作成した以下のファイルを十分に理解してください
 
@@ -58,7 +54,7 @@
 - 2_RDRASpec/business_rule.md
 - 2_RDRASpec/Validation/Spec妥当性検証ストーリー.md
 
-### ストーリーをベースにした妥当性検証
+### RDRA説明をベースにした妥当性検証
 
 - 「RDRA_Knowledge/2_RDRASpec/specValidation.md」を実行し、「Spec妥当性検証結果.md」の名前で「2_RDRASpec/Validation」に出力する
 
